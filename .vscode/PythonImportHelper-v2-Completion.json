@@ -1,0 +1,416 @@
+[
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "HTTPException",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "uvicorn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "uvicorn",
+        "description": "uvicorn",
+        "detail": "uvicorn",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "load_model",
+        "importPath": "src.api.model_loader",
+        "description": "src.api.model_loader",
+        "isExtraImport": true,
+        "detail": "src.api.model_loader",
+        "documentation": {}
+    },
+    {
+        "label": "joblib",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "joblib",
+        "description": "joblib",
+        "detail": "joblib",
+        "documentation": {}
+    },
+    {
+        "label": "streamlit",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "streamlit",
+        "description": "streamlit",
+        "detail": "streamlit",
+        "documentation": {}
+    },
+    {
+        "label": "seaborn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "seaborn",
+        "description": "seaborn",
+        "detail": "seaborn",
+        "documentation": {}
+    },
+    {
+        "label": "matplotlib.pyplot",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "matplotlib.pyplot",
+        "description": "matplotlib.pyplot",
+        "detail": "matplotlib.pyplot",
+        "documentation": {}
+    },
+    {
+        "label": "requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "random",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "random",
+        "description": "random",
+        "detail": "random",
+        "documentation": {}
+    },
+    {
+        "label": "Pipeline",
+        "importPath": "sklearn.pipeline",
+        "description": "sklearn.pipeline",
+        "isExtraImport": true,
+        "detail": "sklearn.pipeline",
+        "documentation": {}
+    },
+    {
+        "label": "Pipeline",
+        "importPath": "sklearn.pipeline",
+        "description": "sklearn.pipeline",
+        "isExtraImport": true,
+        "detail": "sklearn.pipeline",
+        "documentation": {}
+    },
+    {
+        "label": "ColumnTransformer",
+        "importPath": "sklearn.compose",
+        "description": "sklearn.compose",
+        "isExtraImport": true,
+        "detail": "sklearn.compose",
+        "documentation": {}
+    },
+    {
+        "label": "SimpleImputer",
+        "importPath": "sklearn.impute",
+        "description": "sklearn.impute",
+        "isExtraImport": true,
+        "detail": "sklearn.impute",
+        "documentation": {}
+    },
+    {
+        "label": "StandardScaler",
+        "importPath": "sklearn.preprocessing",
+        "description": "sklearn.preprocessing",
+        "isExtraImport": true,
+        "detail": "sklearn.preprocessing",
+        "documentation": {}
+    },
+    {
+        "label": "OneHotEncoder",
+        "importPath": "sklearn.preprocessing",
+        "description": "sklearn.preprocessing",
+        "isExtraImport": true,
+        "detail": "sklearn.preprocessing",
+        "documentation": {}
+    },
+    {
+        "label": "train_test_split",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "GradientBoostingClassifier",
+        "importPath": "sklearn.ensemble",
+        "description": "sklearn.ensemble",
+        "isExtraImport": true,
+        "detail": "sklearn.ensemble",
+        "documentation": {}
+    },
+    {
+        "label": "classification_report",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "roc_auc_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "confusion_matrix",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "TestClient",
+        "importPath": "fastapi.testclient",
+        "description": "fastapi.testclient",
+        "isExtraImport": true,
+        "detail": "fastapi.testclient",
+        "documentation": {}
+    },
+    {
+        "label": "unittest",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "unittest",
+        "description": "unittest",
+        "detail": "unittest",
+        "documentation": {}
+    },
+    {
+        "label": "get_preprocessing_pipeline",
+        "importPath": "src.modeling.pipeline",
+        "description": "src.modeling.pipeline",
+        "isExtraImport": true,
+        "detail": "src.modeling.pipeline",
+        "documentation": {}
+    },
+    {
+        "label": "PacienteInput",
+        "kind": 6,
+        "importPath": "src.api.main",
+        "description": "src.api.main",
+        "peekOfCode": "class PacienteInput(BaseModel):\n    edad: int = Field(..., ge=0, le=120, description=\"Edad del paciente\")\n    sexo: str = Field(..., description=\"Femenino o Masculino\")\n    sector: str = Field(..., description=\"Sector del CESFAM (Norte, Sur, Centro, Rural)\")\n    prevision: str = Field(..., description=\"Tipo de previsión (Fonasa A, B, C, D)\")\n    especialidad: str = Field(..., description=\"Especialidad médica solicitada\")\n    dia_semana: str = Field(..., description=\"Día de la cita (Lunes, Martes...)\")\n    turno: str = Field(..., description=\"Mañana o Tarde\")\n    tiempo_espera_dias: int = Field(..., ge=0, description=\"Días entre solicitud y cita\")\n    inasistencias_previas: int = Field(..., ge=0, description=\"Historial de faltas\")",
+        "detail": "src.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "startup_event",
+        "kind": 2,
+        "importPath": "src.api.main",
+        "description": "src.api.main",
+        "peekOfCode": "def startup_event():\n    global model\n    try:\n        # Carga el archivo .pkl generado por train.py\n        model = load_model(\"model_pipeline.pkl\")\n        print(\"🚀 API Iniciada y Modelo Cargado Correctamente.\")\n    except Exception as e:\n        print(f\"❌ Error fatal al cargar el modelo: {e}\")\n        # No detenemos la app para permitir diagnósticos, pero /predict fallará si model es None\n# --- 3. Esquema de Validación de Datos (Pydantic) ---",
+        "detail": "src.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "predict_no_show",
+        "kind": 2,
+        "importPath": "src.api.main",
+        "description": "src.api.main",
+        "peekOfCode": "def predict_no_show(data: PacienteInput):\n    global model\n    # Verificación de seguridad: ¿El modelo está cargado?\n    if model is None:\n        raise HTTPException(status_code=503, detail=\"El modelo no está disponible. Revise los logs del servidor.\")\n    try:\n        # A. Convertir input JSON a DataFrame (formato que espera el pipeline)\n        input_df = pd.DataFrame([data.dict()])\n        # B. Realizar predicción\n        # El pipeline (model) se encarga de: Imputar nulos -> Encoding -> Escalar -> Predecir",
+        "detail": "src.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "read_root",
+        "kind": 2,
+        "importPath": "src.api.main",
+        "description": "src.api.main",
+        "peekOfCode": "def read_root():\n    return {\"status\": \"ok\", \"message\": \"API CESFAM Model Ready v1.0\"}\n# --- Bloque para ejecución directa ---\nif __name__ == \"__main__\":\n    # Permite ejecutar el script directamente con: python src/api/main.py\n    uvicorn.run(\"src.api.main:app\", host=\"127.0.0.1\", port=8000, reload=True)",
+        "detail": "src.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "src.api.main",
+        "description": "src.api.main",
+        "peekOfCode": "app = FastAPI(\n    title=\"API de Predicción No-Show CESFAM\",\n    description=\"Microservicio para predecir inasistencias a horas médicas usando Machine Learning.\",\n    version=\"1.0.0\"\n)\n# Variable global para almacenar el modelo en memoria\nmodel = None\n# --- 2. Evento de Inicio (Carga del Modelo) ---\n# Se ejecuta una sola vez al arrancar el servidor.\n@app.on_event(\"startup\")",
+        "detail": "src.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "model",
+        "kind": 5,
+        "importPath": "src.api.main",
+        "description": "src.api.main",
+        "peekOfCode": "model = None\n# --- 2. Evento de Inicio (Carga del Modelo) ---\n# Se ejecuta una sola vez al arrancar el servidor.\n@app.on_event(\"startup\")\ndef startup_event():\n    global model\n    try:\n        # Carga el archivo .pkl generado por train.py\n        model = load_model(\"model_pipeline.pkl\")\n        print(\"🚀 API Iniciada y Modelo Cargado Correctamente.\")",
+        "detail": "src.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "load_model",
+        "kind": 2,
+        "importPath": "src.api.model_loader",
+        "description": "src.api.model_loader",
+        "peekOfCode": "def load_model(model_filename=\"model_pipeline.pkl\"):\n    \"\"\"\n    Carga el modelo serializado desde la carpeta de modelos.\n    Args:\n        model_filename (str): Nombre del archivo del modelo.\n    Returns:\n        sklearn.pipeline.Pipeline: El modelo entrenado cargado en memoria.\n    Raises:\n        FileNotFoundError: Si el archivo del modelo no existe.\n    \"\"\"",
+        "detail": "src.api.model_loader",
+        "documentation": {}
+    },
+    {
+        "label": "load_data",
+        "kind": 2,
+        "importPath": "src.dashboard.dashboard",
+        "description": "src.dashboard.dashboard",
+        "peekOfCode": "def load_data():\n    \"\"\"\n    Carga el dataset generado sintéticamente para el EDA.\n    Busca el archivo en la ruta relativa correcta.\n    \"\"\"\n    # Ajustar ruta según desde dónde se ejecute el script\n    # Asumimos ejecución desde la raíz del proyecto\n    path = \"data/raw/dataset_cesfam_v1.csv\"\n    if not os.path.exists(path):\n        return None",
+        "detail": "src.dashboard.dashboard",
+        "documentation": {}
+    },
+    {
+        "label": "API_URL",
+        "kind": 5,
+        "importPath": "src.dashboard.dashboard",
+        "description": "src.dashboard.dashboard",
+        "peekOfCode": "API_URL = \"http://127.0.0.1:8000/predict\"\n# --- FUNCIÓN DE CARGA DE DATOS ---\n@st.cache_data\ndef load_data():\n    \"\"\"\n    Carga el dataset generado sintéticamente para el EDA.\n    Busca el archivo en la ruta relativa correcta.\n    \"\"\"\n    # Ajustar ruta según desde dónde se ejecute el script\n    # Asumimos ejecución desde la raíz del proyecto",
+        "detail": "src.dashboard.dashboard",
+        "documentation": {}
+    },
+    {
+        "label": "page",
+        "kind": 5,
+        "importPath": "src.dashboard.dashboard",
+        "description": "src.dashboard.dashboard",
+        "peekOfCode": "page = st.sidebar.radio(\"Ir a:\", [\"Inicio\", \"Análisis de Datos (EDA)\", \"Predicción en Tiempo Real\"])\nst.sidebar.info(\n    \"\"\"\n    **Proyecto M:** Optimización de Agendamiento CESFAM.\n    Este sistema predice la probabilidad de inasistencia (No-Show)\n    utilizando Machine Learning.\n    \"\"\"\n)\n# --- PÁGINA 1: INICIO ---\nif page == \"Inicio\":",
+        "detail": "src.dashboard.dashboard",
+        "documentation": {}
+    },
+    {
+        "label": "generar_dataset_cesfam",
+        "kind": 2,
+        "importPath": "src.data_prep.data_generator",
+        "description": "src.data_prep.data_generator",
+        "peekOfCode": "def generar_dataset_cesfam(n_registros=10000, guardar_path=\"data/raw/dataset_cesfam_v1.csv\"):\n    \"\"\"\n    Genera un dataset sintético para el problema de agendamiento del CESFAM.\n    Simula patrones lógicos para que el modelo de ML pueda aprender.\n    \"\"\"\n    print(f\"Generando {n_registros} registros sintéticos...\")\n    # --- 1. Generación de Variables Independientes (Features) ---\n    # ID del paciente\n    ids = range(1, n_registros + 1)\n    # Edad: Distribución más realista (más niños y adultos mayores, menos jóvenes)",
+        "detail": "src.data_prep.data_generator",
+        "documentation": {}
+    },
+    {
+        "label": "get_preprocessing_pipeline",
+        "kind": 2,
+        "importPath": "src.modeling.pipeline",
+        "description": "src.modeling.pipeline",
+        "peekOfCode": "def get_preprocessing_pipeline():\n    \"\"\"\n    Crea y devuelve un objeto Pipeline de scikit-learn para el preprocesamiento de datos.\n    Este pipeline maneja:\n    1. Variables Numéricas: Imputación de nulos (mediana) + Escalado Estándar.\n    2. Variables Categóricas: Imputación de nulos (moda) + One-Hot Encoding.\n    Returns:\n        sklearn.compose.ColumnTransformer: El transformador de columnas configurado.\n    \"\"\"\n    # --- 1. Definición de Variables ---",
+        "detail": "src.modeling.pipeline",
+        "documentation": {}
+    },
+    {
+        "label": "train_model",
+        "kind": 2,
+        "importPath": "src.modeling.train",
+        "description": "src.modeling.train",
+        "peekOfCode": "def train_model():\n    print(\"🚀 Iniciando proceso de entrenamiento del modelo CESFAM...\")\n    # --- 1. Carga de Datos ---\n    data_path = \"data/raw/dataset_cesfam_v1.csv\"\n    if not os.path.exists(data_path):\n        raise FileNotFoundError(f\"No se encontró el dataset en {data_path}. Ejecuta primero data_generator.py\")\n    df = pd.read_csv(data_path)\n    print(f\"✅ Datos cargados: {df.shape[0]} registros.\")\n    # --- 2. Separación de Variables (X) y Objetivo (y) ---\n    target = 'target_no_asiste'",
+        "detail": "src.modeling.train",
+        "documentation": {}
+    },
+    {
+        "label": "test_read_root",
+        "kind": 2,
+        "importPath": "tests.test_api",
+        "description": "tests.test_api",
+        "peekOfCode": "def test_read_root():\n    \"\"\"\n    Prueba de Health Check: Verifica que la API esté viva.\n    \"\"\"\n    response = client.get(\"/\")\n    assert response.status_code == 200\n    assert response.json() == {\"status\": \"ok\", \"message\": \"API CESFAM Model Ready\"}\ndef test_predict_endpoint_valid_input():\n    \"\"\"\n    Prueba Funcional: Verifica que el endpoint /predict responda correctamente",
+        "detail": "tests.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "test_predict_endpoint_valid_input",
+        "kind": 2,
+        "importPath": "tests.test_api",
+        "description": "tests.test_api",
+        "peekOfCode": "def test_predict_endpoint_valid_input():\n    \"\"\"\n    Prueba Funcional: Verifica que el endpoint /predict responda correctamente\n    con un JSON válido de entrada.\n    \"\"\"\n    # Payload de ejemplo (un paciente típico)\n    payload = {\n        \"edad\": 30,\n        \"sexo\": \"Femenino\",\n        \"sector\": \"Norte\",",
+        "detail": "tests.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "test_predict_endpoint_high_risk",
+        "kind": 2,
+        "importPath": "tests.test_api",
+        "description": "tests.test_api",
+        "peekOfCode": "def test_predict_endpoint_high_risk():\n    \"\"\"\n    Prueba de Lógica: Verifica que un caso de alto riesgo (muchas faltas previas)\n    tenga una probabilidad alta.\n    \"\"\"\n    payload = {\n        \"edad\": 25,\n        \"sexo\": \"Masculino\",\n        \"sector\": \"Centro\",\n        \"prevision\": \"Fonasa A\",",
+        "detail": "tests.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "client",
+        "kind": 5,
+        "importPath": "tests.test_api",
+        "description": "tests.test_api",
+        "peekOfCode": "client = TestClient(app)\ndef test_read_root():\n    \"\"\"\n    Prueba de Health Check: Verifica que la API esté viva.\n    \"\"\"\n    response = client.get(\"/\")\n    assert response.status_code == 200\n    assert response.json() == {\"status\": \"ok\", \"message\": \"API CESFAM Model Ready\"}\ndef test_predict_endpoint_valid_input():\n    \"\"\"",
+        "detail": "tests.test_api",
+        "documentation": {}
+    },
+    {
+        "label": "TestPreprocessing",
+        "kind": 6,
+        "importPath": "tests.test_preprocess",
+        "description": "tests.test_preprocess",
+        "peekOfCode": "class TestPreprocessing(unittest.TestCase):\n    def setUp(self):\n        \"\"\"\n        Se ejecuta antes de cada test. Crea un DataFrame de prueba pequeño\n        con la misma estructura que el dataset real del CESFAM.\n        \"\"\"\n        self.pipeline = get_preprocessing_pipeline()\n        # Datos de ejemplo (1 fila completa)\n        self.sample_data = pd.DataFrame({\n            'edad': [45],",
+        "detail": "tests.test_preprocess",
+        "documentation": {}
+    }
+]
