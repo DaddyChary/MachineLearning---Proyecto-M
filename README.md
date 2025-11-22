@@ -4,6 +4,7 @@ Proyecto de Minería de Datos - Noviembre 2025
 Este proyecto implementa una solución de Machine Learning para optimizar la gestión de horas médicas en Centros de Salud Familiar (CESFAM), prediciendo la probabilidad de inasistencia (no-show) de los pacientes.
 
 👥 Equipo de Trabajo
+
 Gamaliel Moya
 
 Erika Aristizábal
@@ -43,31 +44,52 @@ Dashboard: Interfaz de usuario en Streamlit para análisis y predicción (dashbo
 📂 3. Estructura del Proyecto
 El código está organizado de manera modular para facilitar el mantenimiento y escalabilidad :
 
-Plaintext
-
 ProyectoCesfam/
+
 ├── README.md               # Documentación general
+
 ├── requirements.txt        # Dependencias del proyecto
+
 ├── data/
+
 │   ├── raw/                # Dataset generado (dataset_cesfam_v1.csv)
+
 │   └── processed/          # Datos procesados (interno)
+
 ├── docs/
+
 │   ├── pruebas/            # Evidencias de pruebas funcionales
+
 │   └── documentacion.pdf   # Informe técnico detallado
+
 ├── models/
+
 │   └── model_pipeline.pkl  # Modelo entrenado serializado
+
 ├── src/
+
 │   ├── api/
+
 │   │   ├── main.py         # API FastAPI (Endpoint /predict)
+
 │   │   └── model_loader.py # Cargador del modelo
+
 │   ├── dashboard/
+
 │   │   └── dashboard.py    # Interfaz Streamlit
+
 │   ├── data_prep/
+
 │   │   └── data_generator.py # Script de generación de datos
+
 │   └── modeling/
+
 │       ├── pipeline.py     # Lógica de preprocesamiento
+
 │       └── train.py        # Script de entrenamiento
+
 └── tests/                  # Tests unitarios (pytest)
+
 
 🚀 4. Guía de Instalación y Ejecución
 Sigue estos pasos en orden para ejecutar el sistema completo.
