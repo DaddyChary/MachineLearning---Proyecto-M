@@ -235,6 +235,14 @@
         "documentation": {}
     },
     {
+        "label": "app",
+        "importPath": "src.api.main",
+        "description": "src.api.main",
+        "isExtraImport": true,
+        "detail": "src.api.main",
+        "documentation": {}
+    },
+    {
         "label": "unittest",
         "kind": 6,
         "isExtraImport": true,
@@ -373,7 +381,7 @@
         "kind": 2,
         "importPath": "tests.test_api",
         "description": "tests.test_api",
-        "peekOfCode": "def test_read_root():\n    \"\"\"\n    Prueba de Health Check: Verifica que la API esté viva.\n    \"\"\"\n    response = client.get(\"/\")\n    assert response.status_code == 200\n    assert response.json() == {\"status\": \"ok\", \"message\": \"API CESFAM Model Ready\"}\ndef test_predict_endpoint_valid_input():\n    \"\"\"\n    Prueba Funcional: Verifica que el endpoint /predict responda correctamente",
+        "peekOfCode": "def test_read_root():\n    \"\"\"\n    Prueba de Health Check: Verifica que la API esté viva.\n    Usamos 'with TestClient' para asegurar que el evento de inicio (startup) corra.\n    \"\"\"\n    with TestClient(app) as client:\n        response = client.get(\"/\")\n        assert response.status_code == 200\n        data = response.json()\n        assert data[\"status\"] == \"ok\"",
         "detail": "tests.test_api",
         "documentation": {}
     },
@@ -382,7 +390,7 @@
         "kind": 2,
         "importPath": "tests.test_api",
         "description": "tests.test_api",
-        "peekOfCode": "def test_predict_endpoint_valid_input():\n    \"\"\"\n    Prueba Funcional: Verifica que el endpoint /predict responda correctamente\n    con un JSON válido de entrada.\n    \"\"\"\n    # Payload de ejemplo (un paciente típico)\n    payload = {\n        \"edad\": 30,\n        \"sexo\": \"Femenino\",\n        \"sector\": \"Norte\",",
+        "peekOfCode": "def test_predict_endpoint_valid_input():\n    \"\"\"\n    Prueba Funcional: Verifica que el endpoint /predict responda correctamente.\n    \"\"\"\n    payload = {\n        \"edad\": 30,\n        \"sexo\": \"Femenino\",\n        \"sector\": \"Norte\",\n        \"prevision\": \"Fonasa B\",\n        \"especialidad\": \"Medicina General\",",
         "detail": "tests.test_api",
         "documentation": {}
     },
@@ -391,16 +399,7 @@
         "kind": 2,
         "importPath": "tests.test_api",
         "description": "tests.test_api",
-        "peekOfCode": "def test_predict_endpoint_high_risk():\n    \"\"\"\n    Prueba de Lógica: Verifica que un caso de alto riesgo (muchas faltas previas)\n    tenga una probabilidad alta.\n    \"\"\"\n    payload = {\n        \"edad\": 25,\n        \"sexo\": \"Masculino\",\n        \"sector\": \"Centro\",\n        \"prevision\": \"Fonasa A\",",
-        "detail": "tests.test_api",
-        "documentation": {}
-    },
-    {
-        "label": "client",
-        "kind": 5,
-        "importPath": "tests.test_api",
-        "description": "tests.test_api",
-        "peekOfCode": "client = TestClient(app)\ndef test_read_root():\n    \"\"\"\n    Prueba de Health Check: Verifica que la API esté viva.\n    \"\"\"\n    response = client.get(\"/\")\n    assert response.status_code == 200\n    assert response.json() == {\"status\": \"ok\", \"message\": \"API CESFAM Model Ready\"}\ndef test_predict_endpoint_valid_input():\n    \"\"\"",
+        "peekOfCode": "def test_predict_endpoint_high_risk():\n    \"\"\"\n    Prueba de Lógica: Verifica caso de alto riesgo.\n    \"\"\"\n    payload = {\n        \"edad\": 25,\n        \"sexo\": \"Masculino\",\n        \"sector\": \"Centro\",\n        \"prevision\": \"Fonasa A\",\n        \"especialidad\": \"Dental\",",
         "detail": "tests.test_api",
         "documentation": {}
     },
