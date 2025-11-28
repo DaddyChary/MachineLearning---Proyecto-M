@@ -25,7 +25,7 @@ def load_data():
     """
     # Ajustar ruta según desde dónde se ejecute el script
     # Asumimos ejecución desde la raíz del proyecto
-    path = "data/raw/dataset_cesfam_v1.csv"
+    path = "data/dataset_cesfam_v1.csv"
     
     if not os.path.exists(path):
         return None
