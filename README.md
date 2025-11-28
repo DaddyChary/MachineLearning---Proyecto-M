@@ -51,9 +51,7 @@ ProyectoCesfam/
 
 ├── data/
 
-│   ├── raw/                # Dataset generado (dataset_cesfam_v1.csv)
-
-│   └── processed/          # Datos procesados (interno)
+│   ├── # Dataset generado (dataset_cesfam_v1.csv)
 
 ├── docs/
 

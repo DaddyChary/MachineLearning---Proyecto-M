@@ -7,7 +7,7 @@ import random
 np.random.seed(42)
 random.seed(42)
 
-def generar_dataset_cesfam(n_registros=10000, guardar_path="data/raw/dataset_cesfam_v1.csv"):
+def generar_dataset_cesfam(n_registros=10000, guardar_path="data/dataset_cesfam_v1.csv"):
     """
     Genera un dataset sintético para el problema de agendamiento del CESFAM.
     Simula patrones lógicos para que el modelo de ML pueda aprender.

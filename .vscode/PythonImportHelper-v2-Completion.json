@@ -354,7 +354,7 @@
         "kind": 2,
         "importPath": "src.data_prep.data_generator",
         "description": "src.data_prep.data_generator",
-        "peekOfCode": "def generar_dataset_cesfam(n_registros=10000, guardar_path=\"data/raw/dataset_cesfam_v1.csv\"):\n    \"\"\"\n    Genera un dataset sintético para el problema de agendamiento del CESFAM.\n    Simula patrones lógicos para que el modelo de ML pueda aprender.\n    \"\"\"\n    print(f\"Generando {n_registros} registros sintéticos...\")\n    # --- 1. Generación de Variables Independientes (Features) ---\n    # ID del paciente\n    ids = range(1, n_registros + 1)\n    # Edad: Distribución más realista (más niños y adultos mayores, menos jóvenes)",
+        "peekOfCode": "def generar_dataset_cesfam(n_registros=10000, guardar_path=\"data/dataset_cesfam_v1.csv\"):\n    \"\"\"\n    Genera un dataset sintético para el problema de agendamiento del CESFAM.\n    Simula patrones lógicos para que el modelo de ML pueda aprender.\n    \"\"\"\n    print(f\"Generando {n_registros} registros sintéticos...\")\n    # --- 1. Generación de Variables Independientes (Features) ---\n    # ID del paciente\n    ids = range(1, n_registros + 1)\n    # Edad: Distribución más realista (más niños y adultos mayores, menos jóvenes)",
         "detail": "src.data_prep.data_generator",
         "documentation": {}
     },
@@ -372,7 +372,7 @@
         "kind": 2,
         "importPath": "src.modeling.train",
         "description": "src.modeling.train",
-        "peekOfCode": "def train_model():\n    print(\"🚀 Iniciando proceso de entrenamiento del modelo CESFAM...\")\n    # --- 1. Carga de Datos ---\n    data_path = \"data/raw/dataset_cesfam_v1.csv\"\n    if not os.path.exists(data_path):\n        raise FileNotFoundError(f\"No se encontró el dataset en {data_path}. Ejecuta primero data_generator.py\")\n    df = pd.read_csv(data_path)\n    print(f\"✅ Datos cargados: {df.shape[0]} registros.\")\n    # --- 2. Separación de Variables (X) y Objetivo (y) ---\n    target = 'target_no_asiste'",
+        "peekOfCode": "def train_model():\n    print(\"🚀 Iniciando proceso de entrenamiento del modelo CESFAM...\")\n    # --- 1. Carga de Datos ---\n    data_path = \"data/dataset_cesfam_v1.csv\"\n    if not os.path.exists(data_path):\n        raise FileNotFoundError(f\"No se encontró el dataset en {data_path}. Ejecuta primero data_generator.py\")\n    df = pd.read_csv(data_path)\n    print(f\"✅ Datos cargados: {df.shape[0]} registros.\")\n    # --- 2. Separación de Variables (X) y Objetivo (y) ---\n    target = 'target_no_asiste'",
         "detail": "src.modeling.train",
         "documentation": {}
     },

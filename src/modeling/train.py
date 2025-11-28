@@ -23,7 +23,7 @@ def train_model():
     print("🚀 Iniciando proceso de entrenamiento del modelo CESFAM...")
 
     # --- 1. Carga de Datos ---
-    data_path = "data/raw/dataset_cesfam_v1.csv"
+    data_path = "data/dataset_cesfam_v1.csv"
     if not os.path.exists(data_path):
         raise FileNotFoundError(f"No se encontró el dataset en {data_path}. Ejecuta primero data_generator.py")
     
