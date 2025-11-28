@@ -53,11 +53,7 @@ ProyectoCesfam/
 
 │   ├── # Dataset generado (dataset_cesfam_v1.csv)
 
-├── docs/
-
-│   ├── pruebas/            # Evidencias de pruebas funcionales
-
-│   └── documentacion.pdf   # Informe técnico detallado
+├── docs/ # Evidencias de pruebas funcionales y documentacion en general   
 
 ├── models/
 
