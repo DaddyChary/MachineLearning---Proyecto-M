@@ -190,6 +190,68 @@ python -m unittest tests/test_preprocess.py
 o usando pytest
 
 pytest tests/
+---
+
+### Guía Rápida para Usar la Plataforma CESFAM
+Sistema de Predicción de Inasistencia (No-Show)
+
+Esta plataforma permite analizar datos de los pacientes y predecir si una persona podría faltar a su cita. No requiere conocimientos técnicos.
+
+1. Inicio — Información General
+   Cuando entras a la página verás primero una explicación del problema y de la solución.
+   Aquí puedes:
+   - Leer por qué existe este sistema.
+   - Saber qué hace: analiza datos y predice riesgos de inasistencia.
+   - Ver instrucciones básicas que indican hacia dónde avanzar:
+     - "Análisis de Datos" para conocer patrones.
+     - "Predicción" para probar el modelo con un paciente.
+   Esta sección es solo informativa, no necesitas realizar ninguna acción.
+
+2. Análisis de Datos (EDA) — Ver patrones del CESFAM
+   En esta sección puedes observar de forma sencilla cómo se comportan los pacientes del CESFAM.
+   Encontrarás:
+
+   Indicadores principales:
+   - Total de citas históricas.
+   - Tasa global de inasistencia.
+
+   Gráficas:
+   - Inasistencia por especialidad: muestra qué áreas tienen más faltas.
+   - Inasistencia por edad: cuántas personas faltan según su edad.
+   - Matriz de correlación: relación entre variables (solo observación).
+
+   Aquí no se ingresan datos. Sirve únicamente para mirar y comprender la información rápidamente.
+
+3. Predicción en Tiempo Real — Calcular riesgo de No-Show
+   Esta es la parte más importante para un usuario común.
+   Aquí puedes simular una cita ingresando datos y el sistema entregará la probabilidad de que la persona falte.
+
+  ### Instrucciones de ingreso de datos
+
+Debes ingresar lo siguiente:
+
+1.  **Edad del paciente:** Mover la barra hasta la edad correspondiente.
+2.  **Sexo:** Seleccionar Femenino o Masculino.
+3.  **Previsión:** Elegir Fonasa A/B/C/D.
+4.  **Día de la semana:** Seleccionar el día de la cita.
+5.  **Especialidad:** Escoger la especialidad donde será atendido.
+6.  **Turno:** Seleccionar mañana o tarde.
+7.  **Sector:** Elegir Norte, Sur, Poniente u otro.
+8.  **Inasistencias previas:** Usar los botones para indicar cuántas veces ha faltado antes.
+9.  **Días de espera:** Mover la barra según cuántos días faltan para la cita.
+    
+4. Finalización
+   Presiona "Calcular Riesgo".
+   El sistema mostrará la probabilidad de inasistencia, indicando si es baja, media o alta.
+   Esto ayuda a decidir si conviene enviar recordatorios, reagendar o tomar medidas preventivas.
+
+Resumen:
+- Inicio: leer información general.
+- Análisis de Datos: visualizar gráficos simples con los patrones de inasistencia.
+- Predicción: ingresar datos de un paciente para obtener el riesgo de que no asista.
+
+La plataforma está diseñada para que cualquier persona pueda utilizarla fácilmente sin conocimientos técnicos.
+
 
 ---
 
