@@ -231,4 +231,10 @@ elif page == "Predicción en Tiempo Real":
 
 # --- PIE DE PÁGINA ---
 st.sidebar.markdown("---")
-st.sidebar.caption("Desarrollado para Minería de Datos 2025")
+
+st.sidebar.caption(
+    "© 2025 Sistema Predictivo de Agendamiento CESFAM\n"
+    "Todos los derechos reservados.\n\n"
+    "Creadores y aportadores:\n"
+    "leonidasSpartano, LuisTobar765, DaddyChary, TheBlackSoldier1, peulsa"
+)
