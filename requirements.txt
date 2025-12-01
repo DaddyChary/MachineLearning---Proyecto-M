@@ -10,3 +10,4 @@ pydantic
 joblib
 pytest
 httpx
+tubulate

@@ -1,0 +1,12 @@
+[theme]
+
+# --- Colores ---
+
+backgroundColor = "#f0f5faff" 
+secondaryBackgroundColor = "#d3d6ffff" 
+primaryColor = "#4682B4"
+textColor = "#31333F"
+
+# --- Tipografía ---
+
+font = "serif"

@@ -49,6 +49,10 @@ ProyectoCesfam/
 
 ├── requirements.txt        # Dependencias del proyecto
 
+├── .streamlit/
+
+│   ├── # config.toml # Modifica Fondo, letras y Tipografía
+
 ├── data/
 
 │   ├── # Dataset generado (dataset_cesfam_v1.csv)

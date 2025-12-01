@@ -13,14 +13,16 @@ st.set_page_config(
     layout="wide"
 )
 
+# --- CONFIGURACIÓN DE ESTILO PARA GRÁFICOS ---
+plt.style.use('seaborn-v0_8-whitegrid') 
+CELSTE_PRINCIPAL = "#B80B9B"
+AZUL_CLARO = "#16E643" 
+
+
 # --- URL DE LA API (Microservicio) ---
 API_URL = "http://127.0.0.1:8000/predict"
 
 # --- FUNCIÓN DE CARGA DE DATOS ---
-# [CAMBIO CLAVE] Se ELIMINÓ el decorador @st.cache_data.
-# RAZÓN: El caching impedía que la función leyera el archivo CSV en cada ciclo,
-# manteniendo el dashboard estático en los 10k registros iniciales. 
-# Para un dashboard 'proactivo', necesitamos que lea los datos más recientes.
 def load_data(path="data/raw/dataset_cesfam_stream.csv"):
     """
     Carga el dataset leyendo siempre la versión más reciente del archivo
@@ -31,19 +33,17 @@ def load_data(path="data/raw/dataset_cesfam_stream.csv"):
         return None
     
     try:
-        # Se lee el archivo completo en cada ejecución.
         df = pd.read_csv(path)
         return df
     except pd.errors.EmptyDataError:
         return None
     except Exception:
-        # Esto maneja el caso raro donde el script de generación está escribiendo
-        # el archivo justo cuando Streamlit intenta leerlo (IOException).
         return None
 
-# --- INTERFAZ LATERAL (SIDEBAR) ---
 st.sidebar.image("https://cdn-icons-png.flaticon.com/512/2966/2966327.png", width=100)
-st.sidebar.title("Navegación")
+st.sidebar.markdown("<h3 style='color: #006dfc;'>Navegación</h3>", 
+    unsafe_allow_html=True
+)
 page = st.sidebar.radio("Ir a:", ["Inicio", "Análisis de Datos (EDA)", "Predicción en Tiempo Real"])
 
 st.sidebar.info(
@@ -78,12 +78,7 @@ elif page == "Análisis de Datos (EDA)":
     st.title("📊 Análisis Exploratorio de Datos (Proactivo)")
     st.markdown("Los datos y métricas se actualizan cada 3 segundos al crecer el archivo CSV.")
     
-    # [CAMBIO CLAVE] Crea un contenedor vacío. Usaremos este contenedor para 
-    # re-escribir el contenido con los datos frescos en cada iteración.
     update_container = st.empty()
-    
-    # [CAMBIO CLAVE] Bucle infinito para la actualización proactiva.
-    # RAZÓN: Simula un flujo de datos continuo al obligar al dashboard a
     # releer el archivo y redibujar los gráficos periódicamente.
     while True:
         
@@ -122,7 +117,8 @@ elif page == "Análisis de Datos (EDA)":
                 with col_g1:
                     st.subheader("Inasistencia por Especialidad")
                     fig, ax = plt.subplots()
-                    sns.barplot(data=df, x='especialidad', y='target_no_asiste', errorbar=None, palette="viridis", ax=ax)
+                    # MODIFICADO: Paleta secuencial celeste
+                    sns.barplot(data=df, x='especialidad', y='target_no_asiste', errorbar=None, palette="Blues_r", ax=ax)
                     plt.xticks(rotation=45)
                     plt.ylabel("Probabilidad de No-Show")
                     # [BUENA PRÁCTICA] Se usa clear_figure=True para liberar la memoria de Matplotlib
@@ -132,7 +128,8 @@ elif page == "Análisis de Datos (EDA)":
                 with col_g2:
                     st.subheader("Inasistencia por Edad")
                     fig, ax = plt.subplots()
-                    sns.histplot(data=df, x='edad', hue='target_no_asiste', multiple="stack", bins=20, palette="coolwarm", ax=ax)
+                    # MODIFICADO: Paleta con los colores celestes definidos
+                    sns.histplot(data=df, x='edad', hue='target_no_asiste', multiple="stack", bins=20, palette=[AZUL_CLARO, CELSTE_PRINCIPAL], ax=ax)
                     plt.xlabel("Edad")
                     st.pyplot(fig, clear_figure=True)
                     st.caption("Distribución de edad diferenciada por asistencia.")
@@ -140,7 +137,8 @@ elif page == "Análisis de Datos (EDA)":
                 st.subheader("Matriz de Correlación (Variables Numéricas)")
                 fig_corr, ax_corr = plt.subplots(figsize=(10, 4))
                 numeric_df = df.select_dtypes(include=['float64', 'int64'])
-                sns.heatmap(numeric_df.corr(), annot=True, cmap='coolwarm', ax=ax_corr)
+                # MODIFICADO: Mapa de calor azulado/celeste
+                sns.heatmap(numeric_df.corr(), annot=True, cmap='mako', ax=ax_corr)
                 st.pyplot(fig_corr, clear_figure=True)
 
         # 3. Pausa de 3 segundos para sincronizar con el script de generación.
@@ -163,7 +161,7 @@ elif page == "Predicción en Tiempo Real":
         with col2:
             prevision = st.selectbox("Previsión", ["Fonasa A", "Fonasa B", "Fonasa C", "Fonasa D"])
             especialidad = st.selectbox("Especialidad", 
-                                        ['Medicina General', 'Dental', 'Matrona', 'Salud Mental', 'Kinesiologia', 'Nutricionista'])
+                                         ['Medicina General', 'Dental', 'Matrona', 'Salud Mental', 'Kinesiologia', 'Nutricionista'])
             inasistencias = st.number_input("Inasistencias Previas", 0, 20, 0)
 
         with col3:
