@@ -4,6 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import requests
 import os
+import time # [AÑADIDO] Importado para la pausa de 3 segundos (simulación de tiempo real)
 
 # --- CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(
@@ -13,25 +14,32 @@ st.set_page_config(
 )
 
 # --- URL DE LA API (Microservicio) ---
-# Asumimos que la API correrá en el puerto 8000 localmente
 API_URL = "http://127.0.0.1:8000/predict"
 
 # --- FUNCIÓN DE CARGA DE DATOS ---
-@st.cache_data
-def load_data():
+# [CAMBIO CLAVE] Se ELIMINÓ el decorador @st.cache_data.
+# RAZÓN: El caching impedía que la función leyera el archivo CSV en cada ciclo,
+# manteniendo el dashboard estático en los 10k registros iniciales. 
+# Para un dashboard 'proactivo', necesitamos que lea los datos más recientes.
+def load_data(path="data/raw/dataset_cesfam_stream.csv"):
     """
-    Carga el dataset generado sintéticamente para el EDA.
-    Busca el archivo en la ruta relativa correcta.
+    Carga el dataset leyendo siempre la versión más reciente del archivo
+    para reflejar los 50 registros añadidos cada 3 segundos.
+    [MODIFICADO] Se cambió la ruta de 'dataset_cesfam_v1.csv' a 'dataset_cesfam_stream.csv'.
     """
-    # Ajustar ruta según desde dónde se ejecute el script
-    # Asumimos ejecución desde la raíz del proyecto
-    path = "data/dataset_cesfam_v1.csv"
-    
     if not os.path.exists(path):
         return None
     
-    df = pd.read_csv(path)
-    return df
+    try:
+        # Se lee el archivo completo en cada ejecución.
+        df = pd.read_csv(path)
+        return df
+    except pd.errors.EmptyDataError:
+        return None
+    except Exception:
+        # Esto maneja el caso raro donde el script de generación está escribiendo
+        # el archivo justo cuando Streamlit intenta leerlo (IOException).
+        return None
 
 # --- INTERFAZ LATERAL (SIDEBAR) ---
 st.sidebar.image("https://cdn-icons-png.flaticon.com/512/2966/2966327.png", width=100)
@@ -41,12 +49,11 @@ page = st.sidebar.radio("Ir a:", ["Inicio", "Análisis de Datos (EDA)", "Predicc
 st.sidebar.info(
     """
     **Proyecto M:** Optimización de Agendamiento CESFAM.
-    Este sistema predice la probabilidad de inasistencia (No-Show)
-    utilizando Machine Learning.
+    Este sistema predice la probabilidad de inasistencia (No-Show).
     """
 )
 
-# --- PÁGINA 1: INICIO ---
+# --- PÁGINA 1: INICIO (Sin cambios) ---
 if page == "Inicio":
     st.title("🏥 Sistema de Gestión de Horas CESFAM")
     st.markdown("""
@@ -55,63 +62,91 @@ if page == "Inicio":
     lo que genera ineficiencia en el uso de recursos médicos y largas listas de espera.
     
     ### Solución Propuesta
-    Este Dashboard integra un modelo de **Machine Learning (XGBoost/LightGBM)** capaz de:
+    Este Dashboard integra un modelo de **Machine Learning** capaz de:
     1. Analizar patrones históricos de comportamiento.
     2. Predecir la probabilidad de que un paciente falte a su cita.
-    3. Permitir al personal administrativo tomar decisiones proactivas (sobrecupos, recordatorios).
+    3. Permitir al personal administrativo tomar decisiones proactivas.
     
     ---
     **Instrucciones:**
-    * Ve a **Análisis de Datos** para entender los patrones.
+    * Ve a **Análisis de Datos** para entender los patrones en tiempo real.
     * Ve a **Predicción** para probar el modelo con un paciente nuevo.
     """)
 
-# --- PÁGINA 2: EDA (Exploratory Data Analysis) ---
+# --- PÁGINA 2: EDA (Exploratory Data Analysis) - PROACTIVO ---
 elif page == "Análisis de Datos (EDA)":
-    st.title("📊 Análisis Exploratorio de Datos")
+    st.title("📊 Análisis Exploratorio de Datos (Proactivo)")
+    st.markdown("Los datos y métricas se actualizan cada 3 segundos al crecer el archivo CSV.")
     
-    df = load_data()
+    # [CAMBIO CLAVE] Crea un contenedor vacío. Usaremos este contenedor para 
+    # re-escribir el contenido con los datos frescos en cada iteración.
+    update_container = st.empty()
     
-    if df is None:
-        st.error("⚠️ No se encontró el dataset. Por favor ejecuta primero: `python src/data_prep/data_generator.py`")
-    else:
-        # Métricas Generales
-        col1, col2, col3 = st.columns(3)
-        total_citas = len(df)
-        tasa_noshow = df['target_no_asiste'].mean() * 100
-        col1.metric("Total Citas Históricas", f"{total_citas}")
-        col2.metric("Tasa Global de No-Show", f"{tasa_noshow:.2f}%")
+    # [CAMBIO CLAVE] Bucle infinito para la actualización proactiva.
+    # RAZÓN: Simula un flujo de datos continuo al obligar al dashboard a
+    # releer el archivo y redibujar los gráficos periódicamente.
+    while True:
         
-        st.markdown("---")
+        # 1. Leer los datos más recientes (sin caché)
+        df = load_data()
         
-        # Gráficos
-        col_g1, col_g2 = st.columns(2)
-        
-        with col_g1:
-            st.subheader("Inasistencia por Especialidad")
-            fig, ax = plt.subplots()
-            sns.barplot(data=df, x='especialidad', y='target_no_asiste', errorbar=None, palette="viridis", ax=ax)
-            plt.xticks(rotation=45)
-            plt.ylabel("Probabilidad de No-Show")
-            st.pyplot(fig)
-            st.caption("Observamos qué especialidades tienen mayor riesgo de deserción.")
+        # 2. Re-dibujar todo el contenido dentro del contenedor (sobrescribiendo el anterior)
+        with update_container.container():
+            
+            # Muestra la hora de actualización para confirmar el ciclo
+            st.info(f"Última Lectura de Datos: **{pd.Timestamp.now().strftime('%H:%M:%S')}**")
+            
+            if df is None:
+                st.error("⚠️ No se encontró el dataset de streaming o está vacío. Asegúrate de ejecutar el script generador de datos.")
+            else:
+                # Métricas Generales
+                col1, col2, col3 = st.columns(3)
+                total_citas = len(df) # Este valor debe crecer con el tiempo
+                tasa_noshow = df['target_no_asiste'].mean() * 100
+                
+                col1.metric("Total Citas Acumuladas", f"{total_citas}")
+                col2.metric("Tasa Global de No-Show", f"{tasa_noshow:.2f}%")
+                
+                # Confirma que el archivo está creciendo
+                file_path = load_data.__defaults__[0]
+                if os.path.exists(file_path):
+                     col3.metric("Tamaño del Archivo", f"{os.path.getsize(file_path) / (1024*1024):.2f} MB")
+                else:
+                    col3.metric("Tamaño del Archivo", "N/A")
 
-        with col_g2:
-            st.subheader("Inasistencia por Edad")
-            fig, ax = plt.subplots()
-            sns.histplot(data=df, x='edad', hue='target_no_asiste', multiple="stack", bins=20, palette="coolwarm", ax=ax)
-            plt.xlabel("Edad")
-            st.pyplot(fig)
-            st.caption("Distribución de edad diferenciada por asistencia.")
+                st.markdown("---")
+                
+                # Gráficos (Generados DENTRO del bucle para actualizarse)
+                col_g1, col_g2 = st.columns(2)
+                
+                with col_g1:
+                    st.subheader("Inasistencia por Especialidad")
+                    fig, ax = plt.subplots()
+                    sns.barplot(data=df, x='especialidad', y='target_no_asiste', errorbar=None, palette="viridis", ax=ax)
+                    plt.xticks(rotation=45)
+                    plt.ylabel("Probabilidad de No-Show")
+                    # [BUENA PRÁCTICA] Se usa clear_figure=True para liberar la memoria de Matplotlib
+                    st.pyplot(fig, clear_figure=True)
+                    st.caption("Observamos qué especialidades tienen mayor riesgo de deserción.")
 
-        st.subheader("Matriz de Correlación (Variables Numéricas)")
-        fig_corr, ax_corr = plt.subplots(figsize=(10, 4))
-        # Seleccionamos solo numéricas para correlación
-        numeric_df = df.select_dtypes(include=['float64', 'int64'])
-        sns.heatmap(numeric_df.corr(), annot=True, cmap='coolwarm', ax=ax_corr)
-        st.pyplot(fig_corr)
+                with col_g2:
+                    st.subheader("Inasistencia por Edad")
+                    fig, ax = plt.subplots()
+                    sns.histplot(data=df, x='edad', hue='target_no_asiste', multiple="stack", bins=20, palette="coolwarm", ax=ax)
+                    plt.xlabel("Edad")
+                    st.pyplot(fig, clear_figure=True)
+                    st.caption("Distribución de edad diferenciada por asistencia.")
 
-# --- PÁGINA 3: PREDICCIÓN (Consumo de API) ---
+                st.subheader("Matriz de Correlación (Variables Numéricas)")
+                fig_corr, ax_corr = plt.subplots(figsize=(10, 4))
+                numeric_df = df.select_dtypes(include=['float64', 'int64'])
+                sns.heatmap(numeric_df.corr(), annot=True, cmap='coolwarm', ax=ax_corr)
+                st.pyplot(fig_corr, clear_figure=True)
+
+        # 3. Pausa de 3 segundos para sincronizar con el script de generación.
+        time.sleep(3)
+
+# --- PÁGINA 3: PREDICCIÓN (Consumo de API - Sin cambios estructurales) ---
 elif page == "Predicción en Tiempo Real":
     st.title("🤖 Predicción de Riesgo de No-Show")
     st.markdown("Ingrese los datos de la cita para evaluar el riesgo de inasistencia.")
@@ -128,7 +163,7 @@ elif page == "Predicción en Tiempo Real":
         with col2:
             prevision = st.selectbox("Previsión", ["Fonasa A", "Fonasa B", "Fonasa C", "Fonasa D"])
             especialidad = st.selectbox("Especialidad", 
-                                      ['Medicina General', 'Dental', 'Matrona', 'Salud Mental', 'Kinesiologia', 'Nutricionista'])
+                                        ['Medicina General', 'Dental', 'Matrona', 'Salud Mental', 'Kinesiologia', 'Nutricionista'])
             inasistencias = st.number_input("Inasistencias Previas", 0, 20, 0)
 
         with col3:
@@ -155,22 +190,20 @@ elif page == "Predicción en Tiempo Real":
         # Llamada a la API
         try:
             with st.spinner("Consultando al oráculo del Machine Learning..."):
-                # Nota: Esto fallará si la API no está corriendo.
-                # Simularemos la respuesta si la API no está activa para que veas el funcionamiento visual
                 try:
                     response = requests.post(API_URL, json=datos_entrada)
                     if response.status_code == 200:
                         result = response.json()
-                        prediccion = result["prediccion"] # 0 o 1
-                        probabilidad = result["probabilidad"] # 0.0 a 1.0
+                        prediccion = result["prediccion"] 
+                        probabilidad = result["probabilidad"] 
                     else:
                         st.error(f"Error en la API: {response.status_code}")
                         st.stop()
                 except requests.exceptions.ConnectionError:
-                    st.warning("⚠️ No se pudo conectar con la API (src/api/main.py). Asegúrate de que esté corriendo.")
+                    st.warning("⚠️ No se pudo conectar con la API (http://127.0.0.1:8000).")
                     st.info("ℹ️ Mostrando simulación visual para propósitos de demostración:")
-                    # --- SIMULACIÓN (SOLO PARA DEMO VISUAL SI LA API ESTÁ OFF) ---
-                    probabilidad = 0.85 if inasistencias > 2 else 0.15
+                    # --- SIMULACIÓN (Fallback) ---
+                    probabilidad = 0.85 if inasistencias > 2 or espera > 30 else 0.15
                     prediccion = 1 if probabilidad > 0.5 else 0
                     # -----------------------------------------------------------
 
@@ -194,7 +227,7 @@ elif page == "Predicción en Tiempo Real":
                     st.warning("💡 **Recomendación:** Enviar recordatorio por WhatsApp o realizar sobre-agendamiento.")
                 else:
                     st.info("💡 **Recomendación:** Mantener flujo normal.")
-                    
+                        
         except Exception as e:
             st.error(f"Ocurrió un error inesperado: {e}")
 

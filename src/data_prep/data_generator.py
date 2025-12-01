@@ -2,105 +2,69 @@ import pandas as pd
 import numpy as np
 import os
 import random
+import time
 
-# Configuración de semilla para reproducibilidad
+# --- Configuración Inicial ---
+GUARDAR_PATH = "data/raw/dataset_cesfam_stream.csv"
+SEMBRAR_INICIAL = 10000 
+SEMBRAR_INCREMENTO = 50  # 50 REGISTROS A AÑADIR CADA 3 SEGUNDOS
+INTERVALO_SEGUNDOS = 3
+
+# Configuración de semilla para reproducibilidad (solo para la siembra inicial)
 np.random.seed(42)
 random.seed(42)
 
-def generar_dataset_cesfam(n_registros=10000, guardar_path="data/dataset_cesfam_v1.csv"):
+def generar_registros_cesfam(n_registros, start_id):
     """
-    Genera un dataset sintético para el problema de agendamiento del CESFAM.
-    Simula patrones lógicos para que el modelo de ML pueda aprender.
+    Genera un lote de registros sintéticos.
     """
-    
-    print(f"Generando {n_registros} registros sintéticos...")
+    if n_registros <= 0:
+        return pd.DataFrame()
 
-    # --- 1. Generación de Variables Independientes (Features) ---
+    # --- Lógica de Generación de Datos (Se mantiene igual) ---
+    ids = range(start_id, start_id + n_registros)
 
-    # ID del paciente
-    ids = range(1, n_registros + 1)
-
-    # Edad: Distribución más realista (más niños y adultos mayores, menos jóvenes)
-    # Simulamos una mezcla de distribuciones
     edades = np.concatenate([
-        np.random.randint(0, 15, int(n_registros * 0.15)),  # Niños
-        np.random.randint(15, 65, int(n_registros * 0.60)), # Adultos
-        np.random.randint(65, 95, int(n_registros * 0.25))  # Adultos Mayores
+        np.random.randint(0, 15, int(n_registros * 0.15)),
+        np.random.randint(15, 65, int(n_registros * 0.60)),
+        np.random.randint(65, 95, int(n_registros * 0.25))
     ])
-    np.random.shuffle(edades) # Mezclar para perder el orden
+    edades = np.resize(edades, n_registros) 
+    np.random.shuffle(edades) 
 
-    # Sexo
     sexos = np.random.choice(['Femenino', 'Masculino'], n_registros, p=[0.55, 0.45])
-
-    # Sector del CESFAM (Variable geográfica)
     sectores = np.random.choice(['Norte', 'Sur', 'Centro', 'Rural'], n_registros, p=[0.3, 0.3, 0.3, 0.1])
-
-    # Previsión (Fonasa Tramos)
     prevision = np.random.choice(['Fonasa A', 'Fonasa B', 'Fonasa C', 'Fonasa D'], n_registros)
-
-    # Especialidad de la cita
     especialidades = np.random.choice(
         ['Medicina General', 'Dental', 'Matrona', 'Salud Mental', 'Kinesiologia', 'Nutricionista'], 
         n_registros, 
         p=[0.40, 0.20, 0.15, 0.10, 0.10, 0.05]
     )
 
-    # Día de la semana (0=Lunes, 4=Viernes) - Asumimos que CESFAM no atiende fines de semana para este ejemplo
     dias_semana = np.random.choice(['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'], n_registros)
-
-    # Turno (Mañana o Tarde)
     turnos = np.random.choice(['Mañana', 'Tarde'], n_registros)
-
-    # Tiempo de espera (Días entre solicitud y la cita)
-    # Usamos una distribución exponencial: muchas citas se piden cerca de la fecha, pocas con mucha antelación
     tiempo_espera_dias = np.random.exponential(scale=10, size=n_registros).astype(int)
+    inasistencias_previas = np.random.poisson(lam=0.5, size=n_registros)
 
-    # Historial de inasistencias previas (0 a 5)
-    inasistencias_previas = np.random.poisson(lam=0.5, size=n_registros) # La mayoría tiene 0
-
-    # --- 2. Simulación de la Variable Objetivo (Lógica de Negocio) ---
-    
-    # Creamos un "Score de Riesgo" base
-    # Si el score supera cierto umbral, asignamos "No Asiste" (1)
-    
-    probabilidad_base = 0.15 # 15% de inasistencia base
-    
+    # Lógica de la Variable Objetivo
     scores = np.random.uniform(0, 1, n_registros)
     
-    # Ajustamos la probabilidad según patrones lógicos (Feature Engineering inverso)
-    
-    # Patrón A: Mayor tiempo de espera = Mayor probabilidad de olvido
     mask_espera_larga = tiempo_espera_dias > 20
-    scores[mask_espera_larga] -= 0.15 # Hace más probable caer en el rango de inasistencia
-
-    # Patrón B: Viernes en la tarde = Mayor inasistencia
+    scores[mask_espera_larga] -= 0.15
     mask_viernes_tarde = (dias_semana == 'Viernes') & (turnos == 'Tarde')
     scores[mask_viernes_tarde] -= 0.10
-
-    # Patrón C: Adultos jóvenes (20-35) faltan más por trabajo/estudios
     mask_jovenes = (edades >= 20) & (edades <= 35)
     scores[mask_jovenes] -= 0.05
-
-    # Patrón D: Historial de inasistencias es fuerte predictor
-    # Si ha faltado mucho antes, es muy probable que falte de nuevo
     scores -= (inasistencias_previas * 0.05)
-    
-    # Patrón E: Adultos mayores suelen ser más responsables (asisten más)
     mask_mayores = edades > 65
     scores[mask_mayores] += 0.10
-
-    # Patrón F: Salud Mental y Dental suelen tener tasas más altas de abandono
     mask_complejos = np.isin(especialidades, ['Salud Mental', 'Dental'])
     scores[mask_complejos] -= 0.05
 
-    # Definir la etiqueta final (1 = No Asiste, 0 = Asiste)
-    # Si el score modificado es bajo (menor que un umbral aleatorio), es inasistencia
-    # Esto asegura que no sea determinístico, pero sí probabilístico
     target = np.where(scores < 0.20, 1, 0)
 
-    # --- 3. Consolidación del DataFrame ---
-    
-    df = pd.DataFrame({
+    # Consolidación del DataFrame
+    df_lote = pd.DataFrame({
         'paciente_id': ids,
         'edad': edades,
         'sexo': sexos,
@@ -111,19 +75,60 @@ def generar_dataset_cesfam(n_registros=10000, guardar_path="data/dataset_cesfam_
         'turno': turnos,
         'tiempo_espera_dias': tiempo_espera_dias,
         'inasistencias_previas': inasistencias_previas,
-        'target_no_asiste': target # Variable Objetivo
+        'target_no_asiste': target
     })
 
-    # --- 4. Guardado ---
-    
-    # Asegurar que el directorio existe
+    return df_lote
+
+def simular_streaming_cesfam(guardar_path=GUARDAR_PATH, inicial=SEMBRAR_INICIAL, incremento=SEMBRAR_INCREMENTO, intervalo_segundos=INTERVALO_SEGUNDOS):
+    """
+    Genera 10,000 registros iniciales (instantáneo) y luego añade 50 cada 3 segundos.
+    """
     os.makedirs(os.path.dirname(guardar_path), exist_ok=True)
     
-    df.to_csv(guardar_path, index=False)
-    print(f"Dataset guardado exitosamente en: {guardar_path}")
-    print(f"Tasa de inasistencia simulada: {df['target_no_asiste'].mean()*100:.2f}%")
+    # --- 1. Generación de 10,000 registros INICIALES (instantáneo) ---
+    print(f"⌛ Generando siembra inicial de {inicial} registros...")
+    df_inicial = generar_registros_cesfam(inicial, start_id=1)
+    df_inicial.to_csv(guardar_path, index=False) # Guarda todo el lote de 10k
     
-    return df
+    print(f"✅ Siembra inicial de 10,000 registros guardada instantáneamente.")
+    
+    siguiente_id = inicial + 1
+    lote_count = 0
+
+    # --- 2. Simulación de Streaming (50 registros cada 3 segundos) ---
+    print("\n--- 🚀 INICIANDO SIMULACIÓN DE STREAMING ---")
+    print(f"Añadiendo **{incremento} nuevos registros** cada {intervalo_segundos} segundos. Presiona Ctrl+C para detener.")
+
+    try:
+        while True:
+            # Generar el nuevo lote de 50
+            df_nuevo_lote = generar_registros_cesfam(incremento, start_id=siguiente_id)
+            
+            if not df_nuevo_lote.empty:
+                # Añadir al archivo CSV existente sin reescribir la cabecera
+                df_nuevo_lote.to_csv(guardar_path, mode='a', header=False, index=False)
+                
+                siguiente_id += incremento
+                lote_count += 1
+                
+                tasa_lote = df_nuevo_lote['target_no_asiste'].mean() * 100
+                
+                # Imprimir confirmación
+                print(f"\n[{time.strftime('%H:%M:%S')}] Lote #{lote_count} | **{incremento} REGISTROS AÑADIDOS**.")
+                print(f"  Registros totales acumulados: {siguiente_id-1} | Tasa de inasistencia del lote: {tasa_lote:.2f}%")
+                print("  Primeros 5 registros del lote:")
+                print(df_nuevo_lote.head().to_markdown(index=False, numalign="left", stralign="left")) 
+                print("--------------------------------------------------------------------------------")
+
+            # Pausa de 3 segundos
+            time.sleep(intervalo_segundos)
+
+    except KeyboardInterrupt:
+        print("\n--- 🛑 SIMULACIÓN DE STREAMING DETENIDA POR EL USUARIO. ---")
+        print(f"Total de lotes generados: {lote_count}")
+
 
 if __name__ == "__main__":
-    generar_dataset_cesfam()
+    # La ejecución comienza aquí y genera primero los 10k y luego los lotes de 50.
+    simular_streaming_cesfam()
