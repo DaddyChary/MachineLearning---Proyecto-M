@@ -77,6 +77,8 @@ ProyectoCesfam/
 
 │   ├── data_prep/
 
+│   │   └── stream_generator.py # Simulación de flujo en tiempo real para el Dashboard
+
 │   │   └── data_generator.py # Script de generación de datos
 
 │   └── modeling/

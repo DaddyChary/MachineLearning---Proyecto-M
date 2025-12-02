@@ -4,7 +4,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import requests
 import os
-import time # [AÑADIDO] Importado para la pausa de 3 segundos (simulación de tiempo real)
+import time
+import subprocess 
+import sys 
+import signal 
 
 # --- CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(
@@ -18,42 +21,66 @@ plt.style.use('seaborn-v0_8-whitegrid')
 CELSTE_PRINCIPAL = "#B80B9B"
 AZUL_CLARO = "#16E643" 
 
-
-# --- URL DE LA API (Microservicio) ---
 API_URL = "http://127.0.0.1:8000/predict"
+GENERATOR_SCRIPT = "src/data_prep/stream_generator.py"
 
-# --- FUNCIÓN DE CARGA DE DATOS ---
+if 'stream_pid' not in st.session_state:
+    st.session_state.stream_pid = None
+if 'stream_active' not in st.session_state:
+    st.session_state.stream_active = False
+
 def load_data(path="data/raw/dataset_cesfam_stream.csv"):
-    """
-    Carga el dataset leyendo siempre la versión más reciente del archivo
-    para reflejar los 50 registros añadidos cada 3 segundos.
-    [MODIFICADO] Se cambió la ruta de 'dataset_cesfam_v1.csv' a 'dataset_cesfam_stream.csv'.
-    """
     if not os.path.exists(path):
         return None
-    
     try:
         df = pd.read_csv(path)
         return df
-    except pd.errors.EmptyDataError:
-        return None
-    except Exception:
+    except (pd.errors.EmptyDataError, Exception):
         return None
 
+# --- SIDEBAR ---
 st.sidebar.image("https://cdn-icons-png.flaticon.com/512/2966/2966327.png", width=100)
-st.sidebar.markdown("<h3 style='color: #006dfc;'>Navegación</h3>", 
-    unsafe_allow_html=True
-)
+st.sidebar.markdown("<h3 style='color: #006dfc;'>Navegación</h3>", unsafe_allow_html=True)
 page = st.sidebar.radio("Ir a:", ["Inicio", "Análisis de Datos (EDA)", "Predicción en Tiempo Real"])
 
-st.sidebar.info(
-    """
-    **Proyecto M:** Optimización de Agendamiento CESFAM.
-    Este sistema predice la probabilidad de inasistencia (No-Show).
-    """
-)
+st.sidebar.markdown("---")
+st.sidebar.markdown("<h3 style='color: #FF5733;'>⚙️ Control de Datos</h3>", unsafe_allow_html=True)
 
-# --- PÁGINA 1: INICIO (Sin cambios) ---
+col_btn1, col_btn2 = st.sidebar.columns(2)
+
+with col_btn1:
+    if st.button("▶️ Iniciar", disabled=st.session_state.stream_active):
+        try:
+            process = subprocess.Popen([sys.executable, GENERATOR_SCRIPT])
+            st.session_state.stream_pid = process.pid
+            st.session_state.stream_active = True
+            st.success("Streaming ON")
+            st.rerun()
+        except Exception as e:
+            st.error(f"Error: {e}")
+
+with col_btn2:
+    if st.button("⏹️ Detener", disabled=not st.session_state.stream_active):
+        if st.session_state.stream_pid:
+            try:
+                os.kill(st.session_state.stream_pid, signal.SIGTERM)
+                st.session_state.stream_pid = None
+                st.session_state.stream_active = False
+                st.warning("Streaming OFF")
+                st.rerun()
+            except Exception as e:
+                st.error(f"Error al detener: {e}")
+                st.session_state.stream_pid = None
+                st.session_state.stream_active = False
+
+if st.session_state.stream_active:
+    st.sidebar.markdown("🟢 **Generando datos en vivo...**")
+else:
+    st.sidebar.markdown("🔴 **Generación detenida.**")
+
+st.sidebar.info("**Proyecto M:** Optimización de Agendamiento CESFAM.")
+
+# --- PÁGINA 1: INICIO ---
 if page == "Inicio":
     st.title("🏥 Sistema de Gestión de Horas CESFAM")
     st.markdown("""
@@ -66,90 +93,82 @@ if page == "Inicio":
     1. Analizar patrones históricos de comportamiento.
     2. Predecir la probabilidad de que un paciente falte a su cita.
     3. Permitir al personal administrativo tomar decisiones proactivas.
-    
+
     ---
     **Instrucciones:**
-    * Ve a **Análisis de Datos** para entender los patrones en tiempo real.
-    * Ve a **Predicción** para probar el modelo con un paciente nuevo.
+    - Ve a **Análisis de Datos** para entender los patrones.
+    - Ve a **Predicción** para probar el modelo.
+    - Presiona **▶️ Iniciar** para simular datos en tiempo real.
     """)
 
-# --- PÁGINA 2: EDA (Exploratory Data Analysis) - PROACTIVO ---
+# --- PÁGINA 2: EDA ---
 elif page == "Análisis de Datos (EDA)":
     st.title("📊 Análisis Exploratorio de Datos (Proactivo)")
-    st.markdown("Los datos y métricas se actualizan cada 3 segundos al crecer el archivo CSV.")
     
     update_container = st.empty()
-    # releer el archivo y redibujar los gráficos periódicamente.
+    streaming_mode = st.session_state.stream_active
+    
     while True:
-        
-        # 1. Leer los datos más recientes (sin caché)
         df = load_data()
         
-        # 2. Re-dibujar todo el contenido dentro del contenedor (sobrescribiendo el anterior)
         with update_container.container():
-            
-            # Muestra la hora de actualización para confirmar el ciclo
-            st.info(f"Última Lectura de Datos: **{pd.Timestamp.now().strftime('%H:%M:%S')}**")
+            st.info(f"Estado del Sistema: {'🟢 ONLINE' if st.session_state.stream_active else '🔴 OFFLINE'} | Última Lectura: **{pd.Timestamp.now().strftime('%H:%M:%S')}**")
             
             if df is None:
-                st.error("⚠️ No se encontró el dataset de streaming o está vacío. Asegúrate de ejecutar el script generador de datos.")
+                st.warning("⚠️ Esperando datos... Presiona '▶️ Iniciar'.")
             else:
-                # Métricas Generales
                 col1, col2, col3 = st.columns(3)
-                total_citas = len(df) # Este valor debe crecer con el tiempo
+                total_citas = len(df)
                 tasa_noshow = df['target_no_asiste'].mean() * 100
                 
                 col1.metric("Total Citas Acumuladas", f"{total_citas}")
                 col2.metric("Tasa Global de No-Show", f"{tasa_noshow:.2f}%")
                 
-                # Confirma que el archivo está creciendo
                 file_path = load_data.__defaults__[0]
                 if os.path.exists(file_path):
-                     col3.metric("Tamaño del Archivo", f"{os.path.getsize(file_path) / (1024*1024):.2f} MB")
-                else:
-                    col3.metric("Tamaño del Archivo", "N/A")
-
+                    col3.metric("Tamaño del Archivo", f"{os.path.getsize(file_path) / (1024*1024):.2f} MB")
+                
                 st.markdown("---")
                 
-                # Gráficos (Generados DENTRO del bucle para actualizarse)
                 col_g1, col_g2 = st.columns(2)
-                
+
                 with col_g1:
                     st.subheader("Inasistencia por Especialidad")
                     fig, ax = plt.subplots()
-                    # MODIFICADO: Paleta secuencial celeste
-                    sns.barplot(data=df, x='especialidad', y='target_no_asiste', errorbar=None, palette="Blues_r", ax=ax)
+                    sns.barplot(data=df, x='especialidad', y='target_no_asiste',
+                                errorbar=None, palette="Blues_r", ax=ax)
                     plt.xticks(rotation=45)
                     plt.ylabel("Probabilidad de No-Show")
-                    # [BUENA PRÁCTICA] Se usa clear_figure=True para liberar la memoria de Matplotlib
                     st.pyplot(fig, clear_figure=True)
-                    st.caption("Observamos qué especialidades tienen mayor riesgo de deserción.")
 
                 with col_g2:
                     st.subheader("Inasistencia por Edad")
                     fig, ax = plt.subplots()
-                    # MODIFICADO: Paleta con los colores celestes definidos
-                    sns.histplot(data=df, x='edad', hue='target_no_asiste', multiple="stack", bins=20, palette=[AZUL_CLARO, CELSTE_PRINCIPAL], ax=ax)
-                    plt.xlabel("Edad")
+                    sns.histplot(data=df, x='edad', hue='target_no_asiste',
+                                 multiple="stack", bins=20,
+                                 palette=[AZUL_CLARO, CELSTE_PRINCIPAL], ax=ax)
                     st.pyplot(fig, clear_figure=True)
-                    st.caption("Distribución de edad diferenciada por asistencia.")
 
-                st.subheader("Matriz de Correlación (Variables Numéricas)")
+                # --- FIX VISUAL APLICADO AQUÍ ---
+                st.subheader("Matriz de Correlación")
                 fig_corr, ax_corr = plt.subplots(figsize=(10, 4))
                 numeric_df = df.select_dtypes(include=['float64', 'int64'])
-                # MODIFICADO: Mapa de calor azulado/celeste
                 sns.heatmap(numeric_df.corr(), annot=True, cmap='mako', ax=ax_corr)
+                plt.xticks(rotation=45, ha="right")
+                plt.yticks(rotation=0)
+                plt.tight_layout()
                 st.pyplot(fig_corr, clear_figure=True)
 
-        # 3. Pausa de 3 segundos para sincronizar con el script de generación.
+        if not st.session_state.stream_active:
+            break
+
         time.sleep(3)
 
-# --- PÁGINA 3: PREDICCIÓN (Consumo de API - Sin cambios estructurales) ---
+# --- PÁGINA 3: PREDICCIÓN ---
 elif page == "Predicción en Tiempo Real":
     st.title("🤖 Predicción de Riesgo de No-Show")
     st.markdown("Ingrese los datos de la cita para evaluar el riesgo de inasistencia.")
     
-    # Formulario de entrada
     with st.form("prediction_form"):
         col1, col2, col3 = st.columns(3)
         
@@ -172,7 +191,6 @@ elif page == "Predicción en Tiempo Real":
         submit_button = st.form_submit_button("Calcular Riesgo")
         
     if submit_button:
-        # Preparar el payload para la API
         datos_entrada = {
             "edad": edad,
             "sexo": sexo,
@@ -185,7 +203,6 @@ elif page == "Predicción en Tiempo Real":
             "inasistencias_previas": inasistencias
         }
         
-        # Llamada a la API
         try:
             with st.spinner("Consultando al oráculo del Machine Learning..."):
                 try:
@@ -198,14 +215,11 @@ elif page == "Predicción en Tiempo Real":
                         st.error(f"Error en la API: {response.status_code}")
                         st.stop()
                 except requests.exceptions.ConnectionError:
-                    st.warning("⚠️ No se pudo conectar con la API (http://127.0.0.1:8000).")
-                    st.info("ℹ️ Mostrando simulación visual para propósitos de demostración:")
-                    # --- SIMULACIÓN (Fallback) ---
+                    st.warning("⚠️ No se pudo conectar con la API.")
+                    st.info("ℹ️ Mostrando simulación:")
                     probabilidad = 0.85 if inasistencias > 2 or espera > 30 else 0.15
                     prediccion = 1 if probabilidad > 0.5 else 0
-                    # -----------------------------------------------------------
 
-            # Visualización del Resultado
             st.markdown("---")
             col_res1, col_res2 = st.columns([1, 2])
             
@@ -218,23 +232,19 @@ elif page == "Predicción en Tiempo Real":
                     st.metric("Probabilidad de Falta", f"{probabilidad:.1%}")
             
             with col_res2:
-                # Barra de progreso visual
                 st.write("Nivel de Riesgo:")
                 st.progress(float(probabilidad))
                 if prediccion == 1:
-                    st.warning("💡 **Recomendación:** Enviar recordatorio por WhatsApp o realizar sobre-agendamiento.")
+                    st.warning("💡 Recomendación: Enviar recordatorio o sobre-agendar.")
                 else:
-                    st.info("💡 **Recomendación:** Mantener flujo normal.")
+                    st.info("💡 Flujo normal.")
                         
         except Exception as e:
             st.error(f"Ocurrió un error inesperado: {e}")
 
-# --- PIE DE PÁGINA ---
+# --- PIE ---
 st.sidebar.markdown("---")
-
 st.sidebar.caption(
     "© 2025 Sistema Predictivo de Agendamiento CESFAM\n"
-    "Todos los derechos reservados.\n\n"
-    "Creadores y aportadores:\n"
-    "leonidasSpartano, LuisTobar765, DaddyChary, TheBlackSoldier1, peulsa"
+    "Creadores: leonidasSpartano, LuisTobar765, DaddyChary, TheBlackSoldier1, peulsa"
 )

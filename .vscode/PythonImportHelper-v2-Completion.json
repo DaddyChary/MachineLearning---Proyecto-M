@@ -121,6 +121,33 @@
         "documentation": {}
     },
     {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "subprocess",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "subprocess",
+        "description": "subprocess",
+        "detail": "subprocess",
+        "documentation": {}
+    },
+    {
+        "label": "signal",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "signal",
+        "description": "signal",
+        "detail": "signal",
+        "documentation": {}
+    },
+    {
         "label": "numpy",
         "kind": 6,
         "isExtraImport": true,
@@ -327,7 +354,25 @@
         "kind": 2,
         "importPath": "src.dashboard.dashboard",
         "description": "src.dashboard.dashboard",
-        "peekOfCode": "def load_data():\n    \"\"\"\n    Carga el dataset generado sintéticamente para el EDA.\n    Busca el archivo en la ruta relativa correcta.\n    \"\"\"\n    # Ajustar ruta según desde dónde se ejecute el script\n    # Asumimos ejecución desde la raíz del proyecto\n    path = \"data/raw/dataset_cesfam_v1.csv\"\n    if not os.path.exists(path):\n        return None",
+        "peekOfCode": "def load_data(path=\"data/raw/dataset_cesfam_stream.csv\"):\n    if not os.path.exists(path):\n        return None\n    try:\n        df = pd.read_csv(path)\n        return df\n    except (pd.errors.EmptyDataError, Exception):\n        return None\n# --- SIDEBAR ---\nst.sidebar.image(\"https://cdn-icons-png.flaticon.com/512/2966/2966327.png\", width=100)",
+        "detail": "src.dashboard.dashboard",
+        "documentation": {}
+    },
+    {
+        "label": "CELSTE_PRINCIPAL",
+        "kind": 5,
+        "importPath": "src.dashboard.dashboard",
+        "description": "src.dashboard.dashboard",
+        "peekOfCode": "CELSTE_PRINCIPAL = \"#B80B9B\"\nAZUL_CLARO = \"#16E643\" \nAPI_URL = \"http://127.0.0.1:8000/predict\"\nGENERATOR_SCRIPT = \"src/data_prep/stream_generator.py\"\nif 'stream_pid' not in st.session_state:\n    st.session_state.stream_pid = None\nif 'stream_active' not in st.session_state:\n    st.session_state.stream_active = False\ndef load_data(path=\"data/raw/dataset_cesfam_stream.csv\"):\n    if not os.path.exists(path):",
+        "detail": "src.dashboard.dashboard",
+        "documentation": {}
+    },
+    {
+        "label": "AZUL_CLARO",
+        "kind": 5,
+        "importPath": "src.dashboard.dashboard",
+        "description": "src.dashboard.dashboard",
+        "peekOfCode": "AZUL_CLARO = \"#16E643\" \nAPI_URL = \"http://127.0.0.1:8000/predict\"\nGENERATOR_SCRIPT = \"src/data_prep/stream_generator.py\"\nif 'stream_pid' not in st.session_state:\n    st.session_state.stream_pid = None\nif 'stream_active' not in st.session_state:\n    st.session_state.stream_active = False\ndef load_data(path=\"data/raw/dataset_cesfam_stream.csv\"):\n    if not os.path.exists(path):\n        return None",
         "detail": "src.dashboard.dashboard",
         "documentation": {}
     },
@@ -336,7 +381,16 @@
         "kind": 5,
         "importPath": "src.dashboard.dashboard",
         "description": "src.dashboard.dashboard",
-        "peekOfCode": "API_URL = \"http://127.0.0.1:8000/predict\"\n# --- FUNCIÓN DE CARGA DE DATOS ---\n@st.cache_data\ndef load_data():\n    \"\"\"\n    Carga el dataset generado sintéticamente para el EDA.\n    Busca el archivo en la ruta relativa correcta.\n    \"\"\"\n    # Ajustar ruta según desde dónde se ejecute el script\n    # Asumimos ejecución desde la raíz del proyecto",
+        "peekOfCode": "API_URL = \"http://127.0.0.1:8000/predict\"\nGENERATOR_SCRIPT = \"src/data_prep/stream_generator.py\"\nif 'stream_pid' not in st.session_state:\n    st.session_state.stream_pid = None\nif 'stream_active' not in st.session_state:\n    st.session_state.stream_active = False\ndef load_data(path=\"data/raw/dataset_cesfam_stream.csv\"):\n    if not os.path.exists(path):\n        return None\n    try:",
+        "detail": "src.dashboard.dashboard",
+        "documentation": {}
+    },
+    {
+        "label": "GENERATOR_SCRIPT",
+        "kind": 5,
+        "importPath": "src.dashboard.dashboard",
+        "description": "src.dashboard.dashboard",
+        "peekOfCode": "GENERATOR_SCRIPT = \"src/data_prep/stream_generator.py\"\nif 'stream_pid' not in st.session_state:\n    st.session_state.stream_pid = None\nif 'stream_active' not in st.session_state:\n    st.session_state.stream_active = False\ndef load_data(path=\"data/raw/dataset_cesfam_stream.csv\"):\n    if not os.path.exists(path):\n        return None\n    try:\n        df = pd.read_csv(path)",
         "detail": "src.dashboard.dashboard",
         "documentation": {}
     },
@@ -345,17 +399,116 @@
         "kind": 5,
         "importPath": "src.dashboard.dashboard",
         "description": "src.dashboard.dashboard",
-        "peekOfCode": "page = st.sidebar.radio(\"Ir a:\", [\"Inicio\", \"Análisis de Datos (EDA)\", \"Predicción en Tiempo Real\"])\nst.sidebar.info(\n    \"\"\"\n    **Proyecto M:** Optimización de Agendamiento CESFAM.\n    Este sistema predice la probabilidad de inasistencia (No-Show)\n    utilizando Machine Learning.\n    \"\"\"\n)\n# --- PÁGINA 1: INICIO ---\nif page == \"Inicio\":",
+        "peekOfCode": "page = st.sidebar.radio(\"Ir a:\", [\"Inicio\", \"Análisis de Datos (EDA)\", \"Predicción en Tiempo Real\"])\nst.sidebar.markdown(\"---\")\nst.sidebar.markdown(\"<h3 style='color: #FF5733;'>⚙️ Control de Datos</h3>\", unsafe_allow_html=True)\ncol_btn1, col_btn2 = st.sidebar.columns(2)\nwith col_btn1:\n    if st.button(\"▶️ Iniciar\", disabled=st.session_state.stream_active):\n        try:\n            process = subprocess.Popen([sys.executable, GENERATOR_SCRIPT])\n            st.session_state.stream_pid = process.pid\n            st.session_state.stream_active = True",
         "detail": "src.dashboard.dashboard",
         "documentation": {}
     },
     {
-        "label": "generar_dataset_cesfam",
+        "label": "generar_registros_cesfam",
         "kind": 2,
         "importPath": "src.data_prep.data_generator",
         "description": "src.data_prep.data_generator",
-        "peekOfCode": "def generar_dataset_cesfam(n_registros=10000, guardar_path=\"data/dataset_cesfam_v1.csv\"):\n    \"\"\"\n    Genera un dataset sintético para el problema de agendamiento del CESFAM.\n    Simula patrones lógicos para que el modelo de ML pueda aprender.\n    \"\"\"\n    print(f\"Generando {n_registros} registros sintéticos...\")\n    # --- 1. Generación de Variables Independientes (Features) ---\n    # ID del paciente\n    ids = range(1, n_registros + 1)\n    # Edad: Distribución más realista (más niños y adultos mayores, menos jóvenes)",
+        "peekOfCode": "def generar_registros_cesfam(n_registros, start_id):\n    \"\"\"\n    Genera un lote de registros sintéticos.\n    \"\"\"\n    if n_registros <= 0:\n        return pd.DataFrame()\n    # --- Lógica de Generación de Datos (Se mantiene igual) ---\n    ids = range(start_id, start_id + n_registros)\n    edades = np.concatenate([\n        np.random.randint(0, 15, int(n_registros * 0.15)),",
         "detail": "src.data_prep.data_generator",
+        "documentation": {}
+    },
+    {
+        "label": "simular_streaming_cesfam",
+        "kind": 2,
+        "importPath": "src.data_prep.data_generator",
+        "description": "src.data_prep.data_generator",
+        "peekOfCode": "def simular_streaming_cesfam(guardar_path=GUARDAR_PATH, inicial=SEMBRAR_INICIAL, incremento=SEMBRAR_INCREMENTO, intervalo_segundos=INTERVALO_SEGUNDOS):\n    \"\"\"\n    Genera 10,000 registros iniciales (instantáneo) y luego añade 50 cada 3 segundos.\n    \"\"\"\n    os.makedirs(os.path.dirname(guardar_path), exist_ok=True)\n    # --- 1. Generación de 10,000 registros INICIALES (instantáneo) ---\n    print(f\"⌛ Generando siembra inicial de {inicial} registros...\")\n    df_inicial = generar_registros_cesfam(inicial, start_id=1)\n    df_inicial.to_csv(guardar_path, index=False) # Guarda todo el lote de 10k\n    print(f\"✅ Siembra inicial de 10,000 registros guardada instantáneamente.\")",
+        "detail": "src.data_prep.data_generator",
+        "documentation": {}
+    },
+    {
+        "label": "GUARDAR_PATH",
+        "kind": 5,
+        "importPath": "src.data_prep.data_generator",
+        "description": "src.data_prep.data_generator",
+        "peekOfCode": "GUARDAR_PATH = \"data/raw/dataset_cesfam_stream.csv\"\nSEMBRAR_INICIAL = 10000 \nSEMBRAR_INCREMENTO = 50  # 50 REGISTROS A AÑADIR CADA 3 SEGUNDOS\nINTERVALO_SEGUNDOS = 3\n# Configuración de semilla para reproducibilidad (solo para la siembra inicial)\nnp.random.seed(42)\nrandom.seed(42)\ndef generar_registros_cesfam(n_registros, start_id):\n    \"\"\"\n    Genera un lote de registros sintéticos.",
+        "detail": "src.data_prep.data_generator",
+        "documentation": {}
+    },
+    {
+        "label": "SEMBRAR_INICIAL",
+        "kind": 5,
+        "importPath": "src.data_prep.data_generator",
+        "description": "src.data_prep.data_generator",
+        "peekOfCode": "SEMBRAR_INICIAL = 10000 \nSEMBRAR_INCREMENTO = 50  # 50 REGISTROS A AÑADIR CADA 3 SEGUNDOS\nINTERVALO_SEGUNDOS = 3\n# Configuración de semilla para reproducibilidad (solo para la siembra inicial)\nnp.random.seed(42)\nrandom.seed(42)\ndef generar_registros_cesfam(n_registros, start_id):\n    \"\"\"\n    Genera un lote de registros sintéticos.\n    \"\"\"",
+        "detail": "src.data_prep.data_generator",
+        "documentation": {}
+    },
+    {
+        "label": "SEMBRAR_INCREMENTO",
+        "kind": 5,
+        "importPath": "src.data_prep.data_generator",
+        "description": "src.data_prep.data_generator",
+        "peekOfCode": "SEMBRAR_INCREMENTO = 50  # 50 REGISTROS A AÑADIR CADA 3 SEGUNDOS\nINTERVALO_SEGUNDOS = 3\n# Configuración de semilla para reproducibilidad (solo para la siembra inicial)\nnp.random.seed(42)\nrandom.seed(42)\ndef generar_registros_cesfam(n_registros, start_id):\n    \"\"\"\n    Genera un lote de registros sintéticos.\n    \"\"\"\n    if n_registros <= 0:",
+        "detail": "src.data_prep.data_generator",
+        "documentation": {}
+    },
+    {
+        "label": "INTERVALO_SEGUNDOS",
+        "kind": 5,
+        "importPath": "src.data_prep.data_generator",
+        "description": "src.data_prep.data_generator",
+        "peekOfCode": "INTERVALO_SEGUNDOS = 3\n# Configuración de semilla para reproducibilidad (solo para la siembra inicial)\nnp.random.seed(42)\nrandom.seed(42)\ndef generar_registros_cesfam(n_registros, start_id):\n    \"\"\"\n    Genera un lote de registros sintéticos.\n    \"\"\"\n    if n_registros <= 0:\n        return pd.DataFrame()",
+        "detail": "src.data_prep.data_generator",
+        "documentation": {}
+    },
+    {
+        "label": "generar_registros_cesfam",
+        "kind": 2,
+        "importPath": "src.data_prep.stream_generator",
+        "description": "src.data_prep.stream_generator",
+        "peekOfCode": "def generar_registros_cesfam(n_registros, start_id):\n    if n_registros <= 0:\n        return pd.DataFrame()\n    ids = range(start_id, start_id + n_registros)\n    edades = np.concatenate([\n        np.random.randint(0, 15, int(n_registros * 0.15)),\n        np.random.randint(15, 65, int(n_registros * 0.60)),\n        np.random.randint(65, 95, int(n_registros * 0.25))\n    ])\n    edades = np.resize(edades, n_registros) ",
+        "detail": "src.data_prep.stream_generator",
+        "documentation": {}
+    },
+    {
+        "label": "simular_streaming_cesfam",
+        "kind": 2,
+        "importPath": "src.data_prep.stream_generator",
+        "description": "src.data_prep.stream_generator",
+        "peekOfCode": "def simular_streaming_cesfam(guardar_path=GUARDAR_PATH, inicial=SEMBRAR_INICIAL, incremento=SEMBRAR_INCREMENTO, intervalo_segundos=INTERVALO_SEGUNDOS):\n    os.makedirs(os.path.dirname(guardar_path), exist_ok=True)\n    print(f\"⌛ Generando siembra inicial de {inicial} registros...\")\n    df_inicial = generar_registros_cesfam(inicial, start_id=1)\n    df_inicial.to_csv(guardar_path, index=False)\n    print(f\"✅ Siembra inicial guardada.\")\n    siguiente_id = inicial + 1\n    try:\n        while True:\n            df_nuevo_lote = generar_registros_cesfam(incremento, start_id=siguiente_id)",
+        "detail": "src.data_prep.stream_generator",
+        "documentation": {}
+    },
+    {
+        "label": "GUARDAR_PATH",
+        "kind": 5,
+        "importPath": "src.data_prep.stream_generator",
+        "description": "src.data_prep.stream_generator",
+        "peekOfCode": "GUARDAR_PATH = \"data/raw/dataset_cesfam_stream.csv\"\nSEMBRAR_INICIAL = 10000 \nSEMBRAR_INCREMENTO = 50  # 50 REGISTROS A AÑADIR CADA 3 SEGUNDOS\nINTERVALO_SEGUNDOS = 3\n# Configuración de semilla\nnp.random.seed(42)\nrandom.seed(42)\ndef generar_registros_cesfam(n_registros, start_id):\n    if n_registros <= 0:\n        return pd.DataFrame()",
+        "detail": "src.data_prep.stream_generator",
+        "documentation": {}
+    },
+    {
+        "label": "SEMBRAR_INICIAL",
+        "kind": 5,
+        "importPath": "src.data_prep.stream_generator",
+        "description": "src.data_prep.stream_generator",
+        "peekOfCode": "SEMBRAR_INICIAL = 10000 \nSEMBRAR_INCREMENTO = 50  # 50 REGISTROS A AÑADIR CADA 3 SEGUNDOS\nINTERVALO_SEGUNDOS = 3\n# Configuración de semilla\nnp.random.seed(42)\nrandom.seed(42)\ndef generar_registros_cesfam(n_registros, start_id):\n    if n_registros <= 0:\n        return pd.DataFrame()\n    ids = range(start_id, start_id + n_registros)",
+        "detail": "src.data_prep.stream_generator",
+        "documentation": {}
+    },
+    {
+        "label": "SEMBRAR_INCREMENTO",
+        "kind": 5,
+        "importPath": "src.data_prep.stream_generator",
+        "description": "src.data_prep.stream_generator",
+        "peekOfCode": "SEMBRAR_INCREMENTO = 50  # 50 REGISTROS A AÑADIR CADA 3 SEGUNDOS\nINTERVALO_SEGUNDOS = 3\n# Configuración de semilla\nnp.random.seed(42)\nrandom.seed(42)\ndef generar_registros_cesfam(n_registros, start_id):\n    if n_registros <= 0:\n        return pd.DataFrame()\n    ids = range(start_id, start_id + n_registros)\n    edades = np.concatenate([",
+        "detail": "src.data_prep.stream_generator",
+        "documentation": {}
+    },
+    {
+        "label": "INTERVALO_SEGUNDOS",
+        "kind": 5,
+        "importPath": "src.data_prep.stream_generator",
+        "description": "src.data_prep.stream_generator",
+        "peekOfCode": "INTERVALO_SEGUNDOS = 3\n# Configuración de semilla\nnp.random.seed(42)\nrandom.seed(42)\ndef generar_registros_cesfam(n_registros, start_id):\n    if n_registros <= 0:\n        return pd.DataFrame()\n    ids = range(start_id, start_id + n_registros)\n    edades = np.concatenate([\n        np.random.randint(0, 15, int(n_registros * 0.15)),",
+        "detail": "src.data_prep.stream_generator",
         "documentation": {}
     },
     {
@@ -372,7 +525,7 @@
         "kind": 2,
         "importPath": "src.modeling.train",
         "description": "src.modeling.train",
-        "peekOfCode": "def train_model():\n    print(\"🚀 Iniciando proceso de entrenamiento del modelo CESFAM...\")\n    # --- 1. Carga de Datos ---\n    data_path = \"data/dataset_cesfam_v1.csv\"\n    if not os.path.exists(data_path):\n        raise FileNotFoundError(f\"No se encontró el dataset en {data_path}. Ejecuta primero data_generator.py\")\n    df = pd.read_csv(data_path)\n    print(f\"✅ Datos cargados: {df.shape[0]} registros.\")\n    # --- 2. Separación de Variables (X) y Objetivo (y) ---\n    target = 'target_no_asiste'",
+        "peekOfCode": "def train_model():\n    print(\"🚀 Iniciando proceso de entrenamiento del modelo CESFAM...\")\n    # --- 1. Carga de Datos ---\n    data_path = \"data/raw/dataset_cesfam_stream.csv\"\n    if not os.path.exists(data_path):\n        raise FileNotFoundError(f\"No se encontró el dataset en {data_path}. Ejecuta primero data_generator.py\")\n    df = pd.read_csv(data_path)\n    print(f\"✅ Datos cargados: {df.shape[0]} registros.\")\n    # --- 2. Separación de Variables (X) y Objetivo (y) ---\n    target = 'target_no_asiste'",
         "detail": "src.modeling.train",
         "documentation": {}
     },
