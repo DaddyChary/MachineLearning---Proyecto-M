@@ -9,14 +9,12 @@ import subprocess
 import sys 
 import signal 
 
-# --- CONFIGURACIÓN DE LA PÁGINA ---
 st.set_page_config(
     page_title="Dashboard CESFAM - Predicción No-Show",
     page_icon="🏥",
     layout="wide"
 )
 
-# --- CONFIGURACIÓN DE ESTILO PARA GRÁFICOS ---
 plt.style.use('seaborn-v0_8-whitegrid') 
 CELSTE_PRINCIPAL = "#B80B9B"
 AZUL_CLARO = "#16E643" 
@@ -38,7 +36,6 @@ def load_data(path="data/raw/dataset_cesfam_stream.csv"):
     except (pd.errors.EmptyDataError, Exception):
         return None
 
-# --- SIDEBAR ---
 st.sidebar.image("https://cdn-icons-png.flaticon.com/512/2966/2966327.png", width=100)
 st.sidebar.markdown("<h3 style='color: #006dfc;'>Navegación</h3>", unsafe_allow_html=True)
 page = st.sidebar.radio("Ir a:", ["Inicio", "Análisis de Datos (EDA)", "Predicción en Tiempo Real"])
@@ -80,7 +77,6 @@ else:
 
 st.sidebar.info("**Proyecto M:** Optimización de Agendamiento CESFAM.")
 
-# --- PÁGINA 1: INICIO ---
 if page == "Inicio":
     st.title("🏥 Sistema de Gestión de Horas CESFAM")
     st.markdown("""
@@ -149,7 +145,6 @@ elif page == "Análisis de Datos (EDA)":
                                  palette=[AZUL_CLARO, CELSTE_PRINCIPAL], ax=ax)
                     st.pyplot(fig, clear_figure=True)
 
-                # --- FIX VISUAL APLICADO AQUÍ ---
                 st.subheader("Matriz de Correlación")
                 fig_corr, ax_corr = plt.subplots(figsize=(10, 4))
                 numeric_df = df.select_dtypes(include=['float64', 'int64'])
@@ -164,7 +159,6 @@ elif page == "Análisis de Datos (EDA)":
 
         time.sleep(3)
 
-# --- PÁGINA 3: PREDICCIÓN ---
 elif page == "Predicción en Tiempo Real":
     st.title("🤖 Predicción de Riesgo de No-Show")
     st.markdown("Ingrese los datos de la cita para evaluar el riesgo de inasistencia.")
@@ -242,7 +236,6 @@ elif page == "Predicción en Tiempo Real":
         except Exception as e:
             st.error(f"Ocurrió un error inesperado: {e}")
 
-# --- PIE ---
 st.sidebar.markdown("---")
 st.sidebar.caption(
     "© 2025 Sistema Predictivo de Agendamiento CESFAM\n"

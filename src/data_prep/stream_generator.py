@@ -4,13 +4,11 @@ import os
 import random
 import time
 
-# --- Configuración Inicial ---
 GUARDAR_PATH = "data/raw/dataset_cesfam_stream.csv"
 SEMBRAR_INICIAL = 10000 
-SEMBRAR_INCREMENTO = 50  # 50 REGISTROS A AÑADIR CADA 3 SEGUNDOS
+SEMBRAR_INCREMENTO = 50 
 INTERVALO_SEGUNDOS = 3
 
-# Configuración de semilla
 np.random.seed(42)
 random.seed(42)
 
@@ -42,7 +40,6 @@ def generar_registros_cesfam(n_registros, start_id):
     tiempo_espera_dias = np.random.exponential(scale=10, size=n_registros).astype(int)
     inasistencias_previas = np.random.poisson(lam=0.5, size=n_registros)
 
-    # Lógica de la Variable Objetivo
     scores = np.random.uniform(0, 1, n_registros)
     
     mask_espera_larga = tiempo_espera_dias > 20
@@ -93,7 +90,6 @@ def simular_streaming_cesfam(guardar_path=GUARDAR_PATH, inicial=SEMBRAR_INICIAL,
             if not df_nuevo_lote.empty:
                 df_nuevo_lote.to_csv(guardar_path, mode='a', header=False, index=False)
                 siguiente_id += incremento
-                # print silencioso para no saturar logs ocultos
             
             time.sleep(intervalo_segundos)
 
