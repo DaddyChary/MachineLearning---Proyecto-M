@@ -241,13 +241,9 @@ Debes ingresar lo siguiente:
 7.  **Sector:** Elegir Norte, Sur, Poniente u otro.
 8.  **Inasistencias previas:** Usar los botones para indicar cuántas veces ha faltado antes.
 9.  **Días de espera:** Mover la barra según cuántos días faltan para la cita.
-    
-4. Finalización
-   Presiona "Calcular Riesgo".
-   El sistema mostrará la probabilidad de inasistencia, indicando si es baja, media o alta.
-   Esto ayuda a decidir si conviene enviar recordatorios, reagendar o tomar medidas preventivas.
+10. **Finalización:** Presiona "Calcular Riesgo". El sistema mostrará la probabilidad de inasistencia, indicando si es baja, media o alta. Esto ayuda a decidir si conviene enviar recordatorios, reagendar o tomar medidas preventivas.
 
-Resumen:
+**Resumen:**
 - Inicio: leer información general.
 - Análisis de Datos: visualizar gráficos simples con los patrones de inasistencia.
 - Predicción: ingresar datos de un paciente para obtener el riesgo de que no asista.
