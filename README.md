@@ -233,15 +233,34 @@ Esta plataforma permite analizar datos de los pacientes y predecir si una person
 Debes ingresar lo siguiente:
 
 1.  **Edad del paciente:** Mover la barra hasta la edad correspondiente.
+   <img width="496" height="92" alt="image" src="https://github.com/user-attachments/assets/b1c6f706-ab8c-428e-9cad-904c68af4567" />
+
 2.  **Sexo:** Seleccionar Femenino o Masculino.
+   <img width="497" height="179" alt="image" src="https://github.com/user-attachments/assets/731388c8-8b3b-48e5-93be-8f4ae4ea16ef" />
+
 3.  **Previsión:** Elegir Fonasa A/B/C/D.
+   <img width="491" height="233" alt="image" src="https://github.com/user-attachments/assets/3e65c521-b524-4500-8786-c3483d2f4bb7" />
+
 4.  **Día de la semana:** Seleccionar el día de la cita.
+   <img width="498" height="280" alt="image" src="https://github.com/user-attachments/assets/9cbc0aad-78f5-4c5c-b12a-fc4ca9771b4d" />
+
 5.  **Especialidad:** Escoger la especialidad donde será atendido.
+   <img width="498" height="319" alt="image" src="https://github.com/user-attachments/assets/072d7433-3ba3-4fb5-b9ea-c981f90939f5" />
+
 6.  **Turno:** Seleccionar mañana o tarde.
+   <img width="496" height="84" alt="image" src="https://github.com/user-attachments/assets/43b155a5-4df0-4293-b87d-0f7274583eb3" />
+
 7.  **Sector:** Elegir Norte, Sur, Poniente u otro.
+   <img width="487" height="229" alt="image" src="https://github.com/user-attachments/assets/59b1c1ac-9eb7-4f46-9832-3548dd490f0e" />
+
 8.  **Inasistencias previas:** Usar los botones para indicar cuántas veces ha faltado antes.
+   <img width="497" height="105" alt="image" src="https://github.com/user-attachments/assets/f9e94f33-4d92-49e2-933b-3d904eb53d13" />
+
 9.  **Días de espera:** Mover la barra según cuántos días faltan para la cita.
+   <img width="491" height="77" alt="image" src="https://github.com/user-attachments/assets/74a94e2f-5ded-4382-ab04-7dd3863e6f38" />
+
 10. **Finalización:** Presiona "Calcular Riesgo". El sistema mostrará la probabilidad de inasistencia, indicando si es baja, media o alta. Esto ayuda a decidir si conviene enviar recordatorios, reagendar o tomar medidas preventivas.
+  <img width="1523" height="715" alt="image" src="https://github.com/user-attachments/assets/2e693f8d-1ff5-4613-8a10-0459cfa7b07d" />
 
 **Resumen:**
 - Inicio: leer información general.
